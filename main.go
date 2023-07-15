@@ -1,13 +1,13 @@
 package main
 
 import (
-	"album/service"
+	"album/api"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	router := gin.Default()
-	router.GET("/hi", service.Hi)
-	router.Run(":80")
+	api.Routes(router)
+	router.Run(":8070")
 }
