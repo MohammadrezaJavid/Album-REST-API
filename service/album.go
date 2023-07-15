@@ -1,10 +1,10 @@
 package service
 
 import (
+	"album/config"
 	"album/database"
 	"net/http"
 
-	"github.com/docker/docker/daemon/config"
 	"github.com/gin-gonic/gin"
 )
 
