@@ -1,18 +1,42 @@
 package handlers
 
-import "github.com/gin-gonic/gin"
+import (
+	"album/database/repositories"
+	"album/database/services"
+	"net/http"
 
-func GetAlbums(c *gin.Context) {
+	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
+)
+
+var DB *gorm.DB = repositories.DatabaseHandle()
+
+func GetAlbums(ctx *gin.Context) {
+	albums := services.SelectAlbums(DB)
+	ctx.IndentedJSON(http.StatusOK, albums)
 }
 
-func GetAlbumByID(c *gin.Context) {
+func GetAlbumByID(ctx *gin.Context) {
+	ID := ctx.Param("id")
+	album := services.SelectAlbumByID(ID, DB)
+	ctx.IndentedJSON(http.StatusOK, album)
 }
 
-func PostAlbum(c *gin.Context) {
+func PostAlbum(ctx *gin.Context) {
+	result, ID := services.InsertAlbum(ctx, DB)
+	if err := result.Error; err != nil {
+		ctx.IndentedJSON(http.StatusBadRequest, gin.H{"Error": err.Error()})
+	}
+	if ID > -1 {
+		ctx.IndentedJSON(http.StatusOK, gin.H{"Album added by ID": ID})
+	}
 }
 
-func UpdateAlbumByID(c *gin.Context) {
+func UpdateAlbumByID(ctx *gin.Context) {
+	// TODO
 }
 
-func DeleteAlbum(c *gin.Context) {
+func DeleteAlbum(ctx *gin.Context) {
+	ID := ctx.Param("id")
+	services.DeleteAlbumByID(ID, DB)
 }

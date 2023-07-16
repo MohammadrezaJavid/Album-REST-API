@@ -6,7 +6,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func Up_1(ctx *gorm.DB) error {
+func MigrateUp_1(ctx *gorm.DB) error {
 	err := ctx.AutoMigrate(&models.Album{})
 	if err != nil {
 		return err
@@ -14,7 +14,7 @@ func Up_1(ctx *gorm.DB) error {
 	return nil
 }
 
-func Down_1(ctx *gorm.DB) error {
+func MigrateDown_1(ctx *gorm.DB) error {
 	err := ctx.Migrator().DropTable(&models.Album{})
 	if err != nil {
 		return err

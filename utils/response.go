@@ -1,5 +1,12 @@
 package utils
 
-func strToInt(str string, base int, bitSize int) int64 {
-	return 0
+import "strconv"
+
+func StrToInt(str string, base int, bitSize int) int64 {
+	i, err := strconv.ParseInt(str, base, bitSize)
+	if err != nil {
+		panic(err)
+	}
+	return i
+
 }
