@@ -4,6 +4,8 @@ import (
 	"album/api/handlers"
 
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func Routes(router *gin.Engine) {
@@ -12,4 +14,5 @@ func Routes(router *gin.Engine) {
 	router.GET("/api/albums/:id", handlers.GetAlbumByID)    // Get one album by ID
 	router.PUT("/api/albums/:id", handlers.UpdateAlbumByID) // Update one album by ID
 	router.DELETE("/api/albums/:id", handlers.DeleteAlbum)  // Delete one album by ID
+	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }

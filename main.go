@@ -6,8 +6,25 @@ import (
 	"album/database/repositories"
 	"fmt"
 
+	_ "album/docs"
+
 	"github.com/gin-gonic/gin"
 )
+
+// @title Go + Gin Album API
+// @version 1.0
+// @description This is a sample server for save Albums in mysql database
+
+// @contact.name API Support
+// @contact.url http://www.swagger.io/api
+// @contact.email api@swagger.io
+
+// @license.name MIT
+// @license.url https://opensource.org/licenses/MIT
+
+// @host localhost:8070
+// @BasePath /
+// @query.collection.format multi
 
 func main() {
 	setConfig()
