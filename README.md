@@ -16,4 +16,7 @@ docker-compose up -d
 
 # For down docker-compose.
 docker-compose down -v
+
+# Run rest api without docker
+go run main.go
 ```
