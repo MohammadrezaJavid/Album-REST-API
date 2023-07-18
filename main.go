@@ -30,7 +30,7 @@ func main() {
 	setConfig()
 	router := gin.Default()
 	api.Routes(router)
-	router.Run(":80")
+	router.Run(":8080")
 }
 
 func setConfig() {
