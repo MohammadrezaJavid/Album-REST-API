@@ -2,6 +2,7 @@ package main
 
 import (
 	"album/api"
+	"album/config"
 	"album/database"
 	"album/database/repositories"
 	"fmt"
@@ -34,8 +35,7 @@ func main() {
 }
 
 func setConfig() {
-	// config.LoadEnv()
-
+	config.LoadEnv()
 	db := repositories.DatabaseHandle()
 	if err := database.MigrateUp_1(db); err != nil {
 		fmt.Printf("Error Migration: %s\n", err.Error())
