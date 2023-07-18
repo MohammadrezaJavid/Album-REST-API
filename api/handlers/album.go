@@ -4,6 +4,7 @@ import (
 	"album/database/repositories"
 	"album/database/services"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -33,7 +34,11 @@ func PostAlbum(ctx *gin.Context) {
 }
 
 func UpdateAlbumByID(ctx *gin.Context) {
-	// TODO
+	ID := ctx.Param("id")
+	idInt, _ := strconv.ParseInt(ID, 10, 64)
+	id := services.UpdateAlbum(idInt, ctx, DB)
+	album := services.SelectAlbumByID(strconv.Itoa(int(id)), DB)
+	ctx.IndentedJSON(http.StatusOK, album)
 }
 
 func DeleteAlbum(ctx *gin.Context) {

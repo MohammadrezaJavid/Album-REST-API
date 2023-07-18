@@ -1,7 +1,6 @@
 package services
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -36,7 +35,6 @@ func InsertAlbum(ctx *gin.Context, db *gorm.DB) (*gorm.DB, int64) {
 	var newAlbum *Album
 	err := ctx.BindJSON(&newAlbum)
 	if err != nil {
-		fmt.Println(newAlbum)
 		ctx.IndentedJSON(http.StatusFound, gin.H{"PostAlbumMessage": err.Error()})
 		return nil, -1
 	}
@@ -45,8 +43,21 @@ func InsertAlbum(ctx *gin.Context, db *gorm.DB) (*gorm.DB, int64) {
 	return result, newAlbum.ID
 }
 
-func UpdateAlbumByID(ID string, db *gorm.DB) *Album {
-	return nil
+func UpdateAlbum(ID int64, ctx *gin.Context, db *gorm.DB) (id int64) {
+	var updateAlbum *Album
+	err := ctx.BindJSON(&updateAlbum)
+	if err != nil {
+		ctx.IndentedJSON(http.StatusFound, gin.H{"UpdateAlbumMessage": err.Error()})
+		return -1
+	}
+
+	db.Save(&Album{
+		ID:     ID,
+		Title:  updateAlbum.Title,
+		Artist: updateAlbum.Artist,
+		Price:  updateAlbum.Price,
+	})
+	return updateAlbum.ID
 }
 
 func DeleteAlbumByID(ID string, db *gorm.DB) {
