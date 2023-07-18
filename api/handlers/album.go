@@ -28,7 +28,7 @@ func GetAlbums(ctx *gin.Context) {
 // @Tags		get album
 // @Produce 	json
 // @Param		id	path string true "Album ID"
-// @Success 	200 	{object} models.Album
+// @Success 	200 {object} models.Album
 // @Router 		/albums/{id}	[get]
 func GetAlbumByID(ctx *gin.Context) {
 	ID := ctx.Param("id")
