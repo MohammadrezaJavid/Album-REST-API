@@ -1,8 +1,8 @@
 package models
 
 type Album struct {
-	ID     int64  `gorm:"primaryKey;autoIncrement"`
-	Title  string `gorm:"size:255"`
-	Artist string
-	Price  float64
+	ID     string  `gorm:"primaryKey" json:"id"`
+	Title  string  `gorm:"size:255" json:"title"`
+	Artist string  `json:"artist"`
+	Price  float64 `json:"price"`
 }

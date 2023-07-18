@@ -11,7 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// @title Go + Gin Album API
+// @title Go + Gin Album rest API Service
 // @version 1.0
 // @description This is a sample server for save Albums in mysql database
 
@@ -23,14 +23,14 @@ import (
 // @license.url https://opensource.org/licenses/MIT
 
 // @host localhost:8070
-// @BasePath /
+// @BasePath /api
 // @query.collection.format multi
 
 func main() {
 	setConfig()
 	router := gin.Default()
 	api.Routes(router)
-	router.Run(":8070")
+	router.Run(":8080")
 }
 
 func setConfig() {

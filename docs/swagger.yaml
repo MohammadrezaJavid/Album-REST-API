@@ -1,4 +1,16 @@
-basePath: /
+basePath: /api
+definitions:
+  models.Album:
+    properties:
+      artist:
+        type: string
+      id:
+        type: string
+      price:
+        type: number
+      title:
+        type: string
+    type: object
 host: localhost:8070
 info:
   contact:
@@ -9,7 +21,93 @@ info:
   license:
     name: MIT
     url: https://opensource.org/licenses/MIT
-  title: Go + Gin Album API
+  title: Go + Gin Album rest API Service
   version: "1.0"
-paths: {}
+paths:
+  /albums:
+    get:
+      description: Retrieve all albums from the database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Album'
+      summary: Get all Albums from database
+      tags:
+      - get album
+    post:
+      description: Post an Album and saved to database
+      parameters:
+      - description: Album JSON
+        in: body
+        name: album
+        required: true
+        schema:
+          $ref: '#/definitions/models.Album'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Album'
+      summary: Post an Album
+      tags:
+      - post album
+    put:
+      description: Retrieve an Album by id from database, update it and save to database
+      parameters:
+      - description: Album JSON
+        in: body
+        name: album
+        required: true
+        schema:
+          $ref: '#/definitions/models.Album'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Album'
+      summary: Update one Album from database
+      tags:
+      - put album
+  /albums/{id}:
+    delete:
+      description: Delete an Album by id from database.
+      parameters:
+      - description: Album id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Delete one Album from database
+      tags:
+      - delete album
+    get:
+      description: Retrieve an Album by id from the database
+      parameters:
+      - description: Album ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Album'
+      summary: Get one Album from database
+      tags:
+      - get album
 swagger: "2.0"
