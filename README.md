@@ -4,10 +4,11 @@ Implementation of a rest api named album with the help of gin framework
 
 ![album rest api swagger ui](./image/album_rest_api.png)
 
-## usage
+
 ### Note: 
     - Before running the api, first customize the .env file.
     - In this project, two Dockerfiles are defined, one of which is for multi stage.
+## usage:
 ```bash
 # Build image
 docker build -t album:latest .
