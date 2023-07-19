@@ -12,6 +12,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func init() {
+	fmt.Println(">>Initializing config...<<")
+	config.LoadEnv()
+	db := repositories.DatabaseHandle()
+	if err := database.MigrateUp_1(db); err != nil {
+		fmt.Printf("Error Migration: %s\n", err.Error())
+	}
+}
+
 // @title Go + Gin Album rest API Service
 // @version 1.0
 // @description This is a sample server for save Albums in mysql database
@@ -28,16 +37,7 @@ import (
 // @query.collection.format multi
 
 func main() {
-	setConfig()
 	router := gin.Default()
 	api.Routes(router)
 	router.Run(":8070")
-}
-
-func setConfig() {
-	config.LoadEnv()
-	db := repositories.DatabaseHandle()
-	if err := database.MigrateUp_1(db); err != nil {
-		fmt.Printf("Error Migration: %s\n", err.Error())
-	}
 }
