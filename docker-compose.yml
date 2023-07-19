@@ -3,9 +3,12 @@ version: '3.9'
 services:
   db:
     image: mysql:8.0
-    restart: on-failure
+    cap_add:
+      - SYS_NICE
     networks:
       - network
+    env_file:
+      - .env
     environment:
       - "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}"
       - "MYSQL_USER=${DB_USER}"
@@ -13,11 +16,11 @@ services:
       - "MYSQL_DATABASE=${DB_NAME}"   
     volumes:
       - db_vol:/var/lib/mysql
+
   web:
-    image: myalbum:v5
-    restart: on-failure
+    image: album:latest
     ports:
-      - "8080:80"
+      - "8070:8070"
     networks:
       - network
     volumes:
@@ -26,6 +29,8 @@ services:
       - db
     links:
       - "db:database"
+    env_file:
+      - .env
 
 networks:
   network:
