@@ -8,7 +8,7 @@ Implementation of a rest api named album with the help of gin framework
 ### Note, Before running the api, first customize the .env file.
 ```bash
 # Build image
-docker build -t album-app:latest .
+docker build -t album:latest .
 
 # Use image without docker-compose.
 docker run -itd -p 8080:80 album-app:latest
