@@ -11,11 +11,10 @@ import (
 )
 
 type Env struct {
-	user              string
-	pass              string
-	host              string
-	dbname            string
-	migrateSourcePath string
+	user   string
+	pass   string
+	host   string
+	dbname string
 }
 
 type Url struct {
@@ -38,7 +37,6 @@ var (
 		os.Getenv("DB_PASSWORD"),
 		os.Getenv("DB_HOST"),
 		os.Getenv("DB_NAME"),
-		os.Getenv("MIGRATION_SOURCE_PATH"),
 	}
 	url *Url = GetUrl(env)
 )
