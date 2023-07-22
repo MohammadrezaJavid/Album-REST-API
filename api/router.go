@@ -8,11 +8,18 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-func Routes(router *gin.Engine) {
-	router.GET("/api/albums", handlers.GetAlbums)          // Get all album
-	router.POST("/api/albums", handlers.PostAlbum)         // Add one album
-	router.PUT("/api/albums", handlers.UpdateAlbumByID)    // Update one album by ID
-	router.GET("/api/albums/:id", handlers.GetAlbumByID)   // Get one album by ID
-	router.DELETE("/api/albums/:id", handlers.DeleteAlbum) // Delete one album by ID
-	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+func Routes() *gin.Engine {
+
+	router := gin.Default()
+	api := router.Group("/api")
+	{
+		api.GET("/albums", handlers.GetAlbums)          // Get all album
+		api.POST("/albums", handlers.PostAlbum)         // Add one album
+		api.POST("/albums", handlers.UpdateAlbumByID)   // Update one album by ID
+		api.GET("/albums/:id", handlers.GetAlbumByID)   // Get one album by ID
+		api.DELETE("/albums/:id", handlers.DeleteAlbum) // Delete one album by ID
+		api.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	}
+
+	return router
 }

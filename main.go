@@ -8,8 +8,6 @@ import (
 	"fmt"
 
 	_ "album/docs"
-
-	"github.com/gin-gonic/gin"
 )
 
 func init() {
@@ -37,7 +35,6 @@ func init() {
 // @query.collection.format multi
 
 func main() {
-	router := gin.Default()
-	api.Routes(router)
+	router := api.Routes()
 	router.Run(":8070")
 }
