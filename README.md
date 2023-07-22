@@ -25,3 +25,6 @@ docker-compose logs -f
 # Run rest api without docker
 go run main.go
 ```
+
+- For access Swagger page
+click [here](http://localhost:8070/api/docs/index.html)
