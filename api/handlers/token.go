@@ -14,6 +14,7 @@ type TokenRequest struct {
 	Password string `json:"password"`
 }
 
+// TODO swagger notations
 // generate one token
 func GenerateToken(ctx *gin.Context) {
 	var request *TokenRequest

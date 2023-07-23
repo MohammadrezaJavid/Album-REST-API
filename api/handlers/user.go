@@ -9,6 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// TODO swagger notations
 // Register one user
 func RegisterUser(ctx *gin.Context) {
 	// bind data of user from json to user of models.User
