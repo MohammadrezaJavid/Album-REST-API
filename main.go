@@ -13,10 +13,8 @@ import (
 func init() {
 	fmt.Println(">>Initializing config...<<")
 	config.LoadEnv()
-	db := repositories.DatabaseHandle()
-	if err := database.MigrateUp_1(db); err != nil {
-		fmt.Printf("Error Migration: %s\n", err.Error())
-	}
+	repositories.DatabaseHandle()
+	database.Migrate()
 }
 
 // @title Go + Gin Album rest API Service
