@@ -17,6 +17,14 @@ services:
     volumes:
       - db_vol:/var/lib/mysql
 
+  adminer:
+    image: adminer:latest
+    container_name: adminer
+    ports:
+      - "8081:8080"
+    networks:
+      - network
+
   web:
     image: album:latest
     ports:
