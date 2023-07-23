@@ -10,8 +10,9 @@ Implementation of a rest api named album with the help of gin framework
     - In this project, two Dockerfiles are defined, one of which is for multi stage.
 ## usage:
 ```bash
-# Build image
-docker build -t album:latest .
+# Build images
+docker build -t album:latest ./dockerfile/album-dockerfile
+docker build -t my-mysql:8.0 ./dockerfile/mysql-dockerfile
 
 # Use image by docker-compose.
 docker-compose up -d
@@ -21,10 +22,10 @@ docker-compose down -v
 
 # For show logs
 docker-compose logs -f
-
-# Run rest api without docker
-go run main.go
 ```
+- Run album REST API without docker
+    - First install mysql using [here](https://dev.mysql.com/doc/refman/8.0/en/linux-installation.html)
+    - go run main.go
 
 - For access Swagger page
 click [here](http://localhost:8070/api/docs/index.html)
