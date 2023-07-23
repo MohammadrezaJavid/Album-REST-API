@@ -7,10 +7,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
-
-var DB *gorm.DB = repositories.DatabaseHandle()
 
 // @Summary 	Get all Albums from database
 // @Description Retrieve all albums from the database
@@ -19,7 +16,7 @@ var DB *gorm.DB = repositories.DatabaseHandle()
 // @Success 	200 	 {object} 	models.Album
 // @Router 		/albums  [get]
 func GetAlbums(ctx *gin.Context) {
-	albums := services.SelectAlbums(DB)
+	albums := services.SelectAlbums(repositories.DataBase)
 	ctx.IndentedJSON(http.StatusOK, albums)
 }
 
@@ -32,7 +29,7 @@ func GetAlbums(ctx *gin.Context) {
 // @Router 		/albums/{id}	[get]
 func GetAlbumByID(ctx *gin.Context) {
 	ID := ctx.Param("id")
-	album := services.SelectAlbumByID(ID, DB)
+	album := services.SelectAlbumByID(ID, repositories.DataBase)
 	ctx.JSON(http.StatusOK, album)
 }
 
@@ -51,7 +48,7 @@ func PostAlbum(ctx *gin.Context) {
 		return
 	}
 
-	err := services.InsertAlbum(newAlbum, DB)
+	err := services.InsertAlbum(newAlbum, repositories.DataBase)
 	if err != nil {
 		ctx.IndentedJSON(http.StatusBadRequest, gin.H{"Error": err.Error()})
 		return
@@ -74,12 +71,12 @@ func UpdateAlbumByID(ctx *gin.Context) {
 		return
 	}
 
-	id, err := services.UpdateAlbum(updateAlbum, DB)
+	id, err := services.UpdateAlbum(updateAlbum, repositories.DataBase)
 	if err != nil {
 		ctx.IndentedJSON(http.StatusBadRequest, gin.H{"Error": err.Error()})
 		return
 	}
-	album := services.SelectAlbumByID(id, DB)
+	album := services.SelectAlbumByID(id, repositories.DataBase)
 	ctx.IndentedJSON(http.StatusOK, album)
 }
 
@@ -91,14 +88,14 @@ func UpdateAlbumByID(ctx *gin.Context) {
 // @Router 		/albums/{id}	[delete]
 func DeleteAlbum(ctx *gin.Context) {
 	ID := ctx.Param("id")
-	album := services.SelectAlbumByID(ID, DB)
+	album := services.SelectAlbumByID(ID, repositories.DataBase)
 	if album.ID == "" {
 		err := message{err: "album not found"}
 		ctx.IndentedJSON(http.StatusNotFound, err.err)
 		return
 	}
 
-	services.DeleteAlbumByID(ID, DB)
+	services.DeleteAlbumByID(ID, repositories.DataBase)
 	err := message{err: "successfully deleted album"}
 	ctx.IndentedJSON(http.StatusOK, err.err)
 }
