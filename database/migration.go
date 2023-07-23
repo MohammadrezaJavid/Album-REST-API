@@ -2,20 +2,23 @@ package database
 
 import (
 	"album/database/models"
-
-	"gorm.io/gorm"
+	"album/database/repositories"
+	"log"
 )
 
-func MigrateUp_1(ctx *gorm.DB) error {
-	err := ctx.AutoMigrate(&models.Album{})
-	if err != nil {
-		return err
+func Migrate() {
+
+	if err := repositories.DataBase.AutoMigrate(&models.Album{}); err != nil {
+		log.Fatal(err.Error())
 	}
-	return nil
+
+	if err := repositories.DataBase.AutoMigrate(&models.User{}); err != nil {
+		log.Fatal(err.Error())
+	}
 }
 
-func MigrateDown_1(ctx *gorm.DB) error {
-	err := ctx.Migrator().DropTable(&models.Album{})
+func MigrateDown() error {
+	err := repositories.DataBase.Migrator().DropTable(&models.Album{})
 	if err != nil {
 		return err
 	}
