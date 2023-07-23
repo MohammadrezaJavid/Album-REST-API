@@ -41,11 +41,13 @@ var (
 	url *Url = GetUrl(env)
 )
 
-func DatabaseHandle() *gorm.DB {
+var DataBase *gorm.DB
+
+func DatabaseHandle() {
 	fmt.Println("Waiting for Connect to DataBase...")
 	result, db := connectDatabase()
 	fmt.Println(result)
-	return db
+	DataBase = db
 }
 
 func connectDatabase() (string, *gorm.DB) {
