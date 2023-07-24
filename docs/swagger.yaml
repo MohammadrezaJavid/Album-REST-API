@@ -1,5 +1,16 @@
 basePath: /api
 definitions:
+  album_swagger_models.User:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
   models.Album:
     properties:
       artist:
@@ -9,6 +20,27 @@ definitions:
       price:
         type: number
       title:
+        type: string
+    type: object
+  models.BaseAuth:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  models.Result:
+    properties:
+      email:
+        type: string
+      userid:
+        type: integer
+      username:
+        type: string
+    type: object
+  models.Token:
+    properties:
+      token:
         type: string
     type: object
 host: localhost:8070
@@ -24,7 +56,7 @@ info:
   title: Go + Gin Album rest API Service
   version: "1.0"
 paths:
-  /albums:
+  /jwt/albums:
     get:
       description: Retrieve all albums from the database
       produces:
@@ -36,7 +68,7 @@ paths:
             $ref: '#/definitions/models.Album'
       summary: Get all Albums from database
       tags:
-      - get album
+      - CRUD Album
     post:
       description: Post an Album and saved to database
       parameters:
@@ -55,7 +87,7 @@ paths:
             $ref: '#/definitions/models.Album'
       summary: Post an Album
       tags:
-      - post album
+      - CRUD Album
     put:
       description: Retrieve an Album by id from database, update it and save to database
       parameters:
@@ -74,8 +106,8 @@ paths:
             $ref: '#/definitions/models.Album'
       summary: Update one Album from database
       tags:
-      - put album
-  /albums/{id}:
+      - CRUD Album
+  /jwt/albums/{id}:
     delete:
       description: Delete an Album by id from database.
       parameters:
@@ -91,7 +123,7 @@ paths:
             type: string
       summary: Delete one Album from database
       tags:
-      - delete album
+      - CRUD Album
     get:
       description: Retrieve an Album by id from the database
       parameters:
@@ -109,5 +141,45 @@ paths:
             $ref: '#/definitions/models.Album'
       summary: Get one Album from database
       tags:
-      - get album
+      - CRUD Album
+  /token:
+    post:
+      description: Create one jwt token
+      parameters:
+      - description: baseAuth JSON
+        in: body
+        name: baseAuth
+        required: true
+        schema:
+          $ref: '#/definitions/models.BaseAuth'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Token'
+      summary: Generate one token
+      tags:
+      - Auth
+  /user/register:
+    post:
+      description: Get info of one user and saved to database
+      parameters:
+      - description: User JSON
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/album_swagger_models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Result'
+      summary: Register one user
+      tags:
+      - Auth
 swagger: "2.0"
