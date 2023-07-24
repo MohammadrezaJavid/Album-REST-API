@@ -1,19 +1,26 @@
 package handlers
 
 import (
-	"album/database/models"
+	dbModel "album/database/models"
 	"album/database/repositories"
 	"album/database/services"
+	swagModel "album/swagger/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
-// TODO swagger notations
-// Register one user
+// RegisterUser godoc
+// @Summary		Register one user
+// @Description Get info of one user and saved to database
+// @Tags		Auth
+// @Produce		json
+// @Param		user	body		swagModel.User		true	"User JSON"
+// @Success		200		{object}	swagModel.Result
+// @Router		/user/register		[post]
 func RegisterUser(ctx *gin.Context) {
 	// bind data of user from json to user of models.User
-	var user models.User
+	var user dbModel.User
 	if err := ctx.BindJSON(&user); err != nil {
 		ctx.IndentedJSON(http.StatusBadRequest,
 			gin.H{"error": err.Error()})
@@ -40,10 +47,11 @@ func RegisterUser(ctx *gin.Context) {
 	// output of a json; newly created user info
 	ctx.IndentedJSON(
 		http.StatusCreated,
-		gin.H{
-			"userId":   user.ID,
-			"email":    user.Email,
-			"username": user.Username,
+
+		&swagModel.Result{
+			UserId:   user.ID,
+			Email:    user.Email,
+			Username: user.Username,
 		},
 	)
 }
