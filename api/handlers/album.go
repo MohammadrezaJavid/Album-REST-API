@@ -4,6 +4,7 @@ import (
 	"album/database/models"
 	"album/database/repositories"
 	"album/database/services"
+	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -90,16 +91,11 @@ func DeleteAlbum(ctx *gin.Context) {
 	ID := ctx.Param("id")
 	album := services.SelectAlbumByID(ID, repositories.DataBase)
 	if album.ID == "" {
-		err := message{err: "album not found"}
-		ctx.IndentedJSON(http.StatusNotFound, err.err)
+		ctx.IndentedJSON(http.StatusNotFound, gin.H{"Error": errors.New("album not found")})
+		ctx.Abort()
 		return
 	}
 
 	services.DeleteAlbumByID(ID, repositories.DataBase)
-	err := message{err: "successfully deleted album"}
-	ctx.IndentedJSON(http.StatusOK, err.err)
-}
-
-type message struct {
-	err string
+	ctx.IndentedJSON(http.StatusOK, gin.H{"Error": errors.New("successfully deleted album")})
 }
