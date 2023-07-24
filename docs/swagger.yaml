@@ -66,6 +66,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.Album'
+      security:
+      - BearerAuth: []
       summary: Get all Albums from database
       tags:
       - CRUD Album
@@ -85,6 +87,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.Album'
+      security:
+      - BearerAuth: []
       summary: Post an Album
       tags:
       - CRUD Album
@@ -104,6 +108,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.Album'
+      security:
+      - BearerAuth: []
       summary: Update one Album from database
       tags:
       - CRUD Album
@@ -121,6 +127,8 @@ paths:
           description: OK
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Delete one Album from database
       tags:
       - CRUD Album
@@ -139,6 +147,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.Album'
+      security:
+      - BearerAuth: []
       summary: Get one Album from database
       tags:
       - CRUD Album
@@ -182,4 +192,9 @@ paths:
       summary: Register one user
       tags:
       - Auth
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

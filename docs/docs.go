@@ -26,6 +26,11 @@ const docTemplate = `{
     "paths": {
         "/jwt/albums": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieve all albums from the database",
                 "produces": [
                     "application/json"
@@ -44,6 +49,11 @@ const docTemplate = `{
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieve an Album by id from database, update it and save to database",
                 "produces": [
                     "application/json"
@@ -73,6 +83,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Post an Album and saved to database",
                 "produces": [
                     "application/json"
@@ -104,6 +119,11 @@ const docTemplate = `{
         },
         "/jwt/albums/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieve an Album by id from the database",
                 "produces": [
                     "application/json"
@@ -131,6 +151,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Delete an Album by id from database.",
                 "tags": [
                     "CRUD Album"
@@ -285,6 +310,13 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }`
