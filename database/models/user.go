@@ -10,8 +10,8 @@ type User struct {
 	Name     string `json:"name"`
 	Username string `json:"username"`
 
-	Email    string `json:"email"    gorm:"unique"`
-	Password string `json:"password" gorm:"unique"`
+	Email    string `gorm:"unique" json:"email"`
+	Password string `gorm:"unique" json:"password"`
 }
 
 func (user *User) HashPassword(password string) error {

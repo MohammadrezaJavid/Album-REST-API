@@ -2,23 +2,25 @@ package handlers
 
 import (
 	"album/authentication"
-	"album/database/models"
+	dbModels "album/database/models"
 	"album/database/repositories"
+	swagModels "album/swagger/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
-type TokenRequest struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
-}
-
-// TODO swagger notations
-// generate one token
+// GenerateToken godoc
+// @Summary		Generate one token
+// @Description Create one jwt token
+// @Tags		Auth
+// @Produce		json
+// @Param		baseAuth	body		swagModels.BaseAuth	true	"baseAuth JSON"
+// @Success		200			{object}	swagModels.Token
+// @Router		/token		[post]
 func GenerateToken(ctx *gin.Context) {
-	var request *TokenRequest
-	var user *models.User
+	var request *swagModels.BaseAuth
+	var user dbModels.User
 
 	// bind data of user from json to user of models.User
 	if err := ctx.BindJSON(&request); err != nil {
@@ -56,5 +58,5 @@ func GenerateToken(ctx *gin.Context) {
 	}
 
 	// send token by json file
-	ctx.IndentedJSON(http.StatusOK, gin.H{"token": tokenString})
+	ctx.IndentedJSON(http.StatusOK, &swagModels.Token{Token: tokenString})
 }

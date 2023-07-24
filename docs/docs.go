@@ -24,14 +24,19 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/albums": {
+        "/jwt/albums": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieve all albums from the database",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "get album"
+                    "CRUD Album"
                 ],
                 "summary": "Get all Albums from database",
                 "responses": {
@@ -44,12 +49,17 @@ const docTemplate = `{
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieve an Album by id from database, update it and save to database",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "put album"
+                    "CRUD Album"
                 ],
                 "summary": "Update one Album from database",
                 "parameters": [
@@ -73,12 +83,17 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Post an Album and saved to database",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "post album"
+                    "CRUD Album"
                 ],
                 "summary": "Post an Album",
                 "parameters": [
@@ -102,14 +117,19 @@ const docTemplate = `{
                 }
             }
         },
-        "/albums/{id}": {
+        "/jwt/albums/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieve an Album by id from the database",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "get album"
+                    "CRUD Album"
                 ],
                 "summary": "Get one Album from database",
                 "parameters": [
@@ -131,9 +151,14 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Delete an Album by id from database.",
                 "tags": [
-                    "delete album"
+                    "CRUD Album"
                 ],
                 "summary": "Delete one Album from database",
                 "parameters": [
@@ -154,9 +179,88 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/token": {
+            "post": {
+                "description": "Create one jwt token",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Generate one token",
+                "parameters": [
+                    {
+                        "description": "baseAuth JSON",
+                        "name": "baseAuth",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseAuth"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Token"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/register": {
+            "post": {
+                "description": "Get info of one user and saved to database",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Register one user",
+                "parameters": [
+                    {
+                        "description": "User JSON",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/album_swagger_models.User"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Result"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "album_swagger_models.User": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
         "models.Album": {
             "type": "object",
             "properties": {
@@ -173,6 +277,46 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        },
+        "models.BaseAuth": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Result": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "userid": {
+                    "type": "integer"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Token": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }`

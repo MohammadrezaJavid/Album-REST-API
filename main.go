@@ -17,6 +17,11 @@ func init() {
 	database.Migrate()
 }
 
+/**
+* use this link for Authorization
+* https://github.com/swaggo/gin-swagger/issues/90#issuecomment-903813846
+**/
+
 // @title Go + Gin Album rest API Service
 // @version 1.0
 // @description This is a sample server for save Albums in mysql database
@@ -31,6 +36,10 @@ func init() {
 // @host localhost:8070
 // @BasePath /api
 // @query.collection.format multi
+
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
 
 func main() {
 	router := api.Routes()
