@@ -3,16 +3,17 @@ FROM golang:1.21rc2-alpine3.18 AS builder
 
 WORKDIR /app
 
-COPY ../../go.*        ./
+COPY ../../go.*             ./
 RUN go mod download
 
-COPY ../../*.go        ./
-COPY ../../api/        ./api
-COPY ../../config/     ./config
-COPY ../../database/   ./database
-COPY ../../migrations/ ./migrations
-COPY ../../docs/       ./docs
-COPY ../../vendor/     ./vendor
+COPY ../../*.go             ./
+COPY ../../api/             ./api
+COPY ../../authentication   ./authentication
+COPY ../../config/          ./config
+COPY ../../database/        ./database
+COPY ../../docs/            ./docs
+COPY ../../middlewares      ./middlewares
+COPY ../../swagger          ./swagger
 
 RUN CGO_ENABLE=0 GOOS=linux GOARCH=amd64 -ldflags="-w -s" go build main.go
 
