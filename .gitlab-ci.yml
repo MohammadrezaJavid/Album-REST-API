@@ -1,0 +1,13 @@
+stages:
+  - test
+  - build
+  - deploy
+
+run-test:
+  stage: test
+
+build-docker-image:
+  stage: build
+
+deploy:
+  stage: deploy
