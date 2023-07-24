@@ -16,6 +16,7 @@ import (
 // @Produce 	json
 // @Success 	200 	 {object} 	models.Album
 // @Router 		/jwt/albums  	[get]
+// @Security BearerAuth
 func GetAlbums(ctx *gin.Context) {
 	albums := services.SelectAlbums(repositories.DataBase)
 	ctx.IndentedJSON(http.StatusOK, albums)
@@ -28,6 +29,7 @@ func GetAlbums(ctx *gin.Context) {
 // @Param		id	path string true "Album ID"
 // @Success 	200 {object} models.Album
 // @Router 		/jwt/albums/{id}	[get]
+// @Security BearerAuth
 func GetAlbumByID(ctx *gin.Context) {
 	ID := ctx.Param("id")
 	album := services.SelectAlbumByID(ID, repositories.DataBase)
@@ -42,6 +44,7 @@ func GetAlbumByID(ctx *gin.Context) {
 // @Param		album	body		models.Album	true	"Album JSON"
 // @Success 	200 	{object} 	models.Album
 // @Router 		/jwt/albums 	[post]
+// @Security BearerAuth
 func PostAlbum(ctx *gin.Context) {
 	var newAlbum *models.Album
 	if err := ctx.BindJSON(&newAlbum); err != nil {
@@ -64,6 +67,7 @@ func PostAlbum(ctx *gin.Context) {
 // @Param		album	body		models.Album	true	"Album JSON"
 // @Success 	200 	{object} models.Album
 // @Router 		/jwt/albums		[put]
+// @Security BearerAuth
 func UpdateAlbumByID(ctx *gin.Context) {
 	var updateAlbum *models.Album
 	err := ctx.BindJSON(&updateAlbum)
@@ -87,6 +91,7 @@ func UpdateAlbumByID(ctx *gin.Context) {
 // @Param		id	path	string	true	"Album id"
 // @Success 	200 	{object} string
 // @Router 		/jwt/albums/{id}	[delete]
+// @Security BearerAuth
 func DeleteAlbum(ctx *gin.Context) {
 	ID := ctx.Param("id")
 	album := services.SelectAlbumByID(ID, repositories.DataBase)
