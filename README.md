@@ -2,7 +2,7 @@
 
 Implementation of a rest api named album with the help of gin framework
 
-![album rest api swagger ui](./image/album_rest_api.png)
+![album rest api swagger ui](./image/ScreenshotalbumAPIwithJWT.png)
 
 
 ### Note: 
