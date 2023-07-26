@@ -2,12 +2,12 @@ package unittest
 
 import (
 	"album/api"
-	"album/config"
 	"album/database"
 	"album/database/repositories"
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
 	"net/http"
 	"net/http/httptest"
@@ -22,13 +22,13 @@ func TestMain(m *testing.M) {
 
 	setUpMigrate()
 	resutlCode := m.Run()
-	downMigrate()
+	// downMigrate()
 
 	os.Exit(resutlCode)
 }
 
 func setUpMigrate() {
-	config.LoadEnv()
+	//config.LoadEnv()
 
 	repositories.DatabaseHandle()
 	database.Migrate()
@@ -54,8 +54,24 @@ func makeRequest(httpMethod, url string, body interface{}, isAuthRequest bool) (
 		log.Fatal(errors.New(err.Error()))
 	}
 
+	// Add Authorization Header
+	if isAuthRequest {
+		request.Header.Add("Authorization", "Bearer"+token(body))
+	}
+
 	responseWriter = httptest.NewRecorder()
 	routes := getRoutes()
 	routes.ServeHTTP(responseWriter, request)
+	return
+}
+
+// Get bearer token
+func token(user interface{}) (jwtToken string) {
+	responseWriter := makeRequest(http.MethodPost, "/api/token", user, false)
+
+	var responseBody map[string]string
+	json.Unmarshal(responseWriter.Body.Bytes(), &responseBody)
+	jwtToken = responseBody["jwt"]
+	fmt.Println(jwtToken)
 	return
 }
