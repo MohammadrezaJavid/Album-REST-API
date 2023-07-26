@@ -16,3 +16,13 @@ run:
 
 test:
 	@ go test -v -cover ./unitTest/
+
+mysql-up:
+	@ docker-compose -f ./mysql-docker-compose.yml up -d
+
+mysql-down:
+	@ docker-compose -f ./mysql-docker-compose.yml down -v
+
+push-images:
+	# @ TODO tags images
+	# @ TODO push images
