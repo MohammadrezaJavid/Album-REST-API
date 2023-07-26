@@ -27,5 +27,10 @@ docker-compose logs -f
     - First install mysql using [here](https://dev.mysql.com/doc/refman/8.0/en/linux-installation.html)
     - go run main.go
 
+- Run Unit Test for this project
+```bash
+go test -v -cover ./unitTest/
+```
+
 - For access Swagger page
 click [here](http://localhost:8070/api/docs/index.html)

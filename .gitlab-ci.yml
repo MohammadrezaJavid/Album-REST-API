@@ -1,0 +1,16 @@
+stages:
+  - test
+  - build
+  - deploy
+
+run-test:
+  stage: test
+  # TODO
+
+build-docker-image:
+  stage: build
+  # TODO
+
+deploy:
+  stage: deploy
+  # TODO
