@@ -24,14 +24,15 @@ make compose-logs
 ```
 - Run album REST API without docker
     - First install mysql using [here](https://dev.mysql.com/doc/refman/8.0/en/linux-installation.html)
-    - ```bash
-    make run
-    ```
+    -
+      ```bash
+      make run
+      ```
 
 - Run Unit Test for this project
-```bash
-make test
-```
+    ```bash
+    make test
+    ```
 
 - For access Swagger page
 click [here](http://localhost:8070/api/docs/index.html)
