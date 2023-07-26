@@ -11,25 +11,26 @@ Implementation of a rest api named album with the help of gin framework
 ## usage:
 ```bash
 # Build images
-docker build -t album:latest ./dockerfile/album-dockerfile
-docker build -t my-mysql:8.0 ./dockerfile/mysql-dockerfile
+make build-images
 
 # Use image by docker-compose.
-docker-compose up -d
+make compose-up
 
 # For down docker-compose.
-docker-compose down -v
+make compose-down
 
 # For show logs
-docker-compose logs -f
+make compose-logs
 ```
 - Run album REST API without docker
     - First install mysql using [here](https://dev.mysql.com/doc/refman/8.0/en/linux-installation.html)
-    - go run main.go
+    - ```bash
+    make run
+    ```
 
 - Run Unit Test for this project
 ```bash
-go test -v -cover ./unitTest/
+make test
 ```
 
 - For access Swagger page
