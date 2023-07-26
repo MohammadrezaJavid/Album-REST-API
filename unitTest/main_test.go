@@ -3,11 +3,11 @@ package unittest
 import (
 	"album/api"
 	"album/database"
+	"album/database/models"
 	"album/database/repositories"
 	"bytes"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"log"
 	"net/http"
 	"net/http/httptest"
@@ -22,13 +22,13 @@ func TestMain(m *testing.M) {
 
 	setUpMigrate()
 	resutlCode := m.Run()
-	// downMigrate()
+	downMigrate()
 
 	os.Exit(resutlCode)
 }
 
 func setUpMigrate() {
-	//config.LoadEnv()
+	// config.LoadEnv()
 
 	repositories.DatabaseHandle()
 	database.Migrate()
@@ -42,7 +42,13 @@ func getRoutes() *gin.Engine {
 	return api.Routes()
 }
 
-func makeRequest(httpMethod, url string, body interface{}, isAuthRequest bool) (responseWriter *httptest.ResponseRecorder) {
+func makeRequest(
+	httpMethod,
+	url string,
+	body interface{},
+	isAuthRequest bool,
+
+) (responseWriter *httptest.ResponseRecorder) {
 
 	requestBody, _ := json.Marshal(body)
 	request, err := http.NewRequest(
@@ -56,7 +62,8 @@ func makeRequest(httpMethod, url string, body interface{}, isAuthRequest bool) (
 
 	// Add Authorization Header
 	if isAuthRequest {
-		request.Header.Add("Authorization", "Bearer"+token(body))
+		to := token(Users[0])
+		request.Header.Add("Authorization", to)
 	}
 
 	responseWriter = httptest.NewRecorder()
@@ -66,12 +73,11 @@ func makeRequest(httpMethod, url string, body interface{}, isAuthRequest bool) (
 }
 
 // Get bearer token
-func token(user interface{}) (jwtToken string) {
+func token(user *models.User) (bearerToken string) {
 	responseWriter := makeRequest(http.MethodPost, "/api/token", user, false)
 
 	var responseBody map[string]string
 	json.Unmarshal(responseWriter.Body.Bytes(), &responseBody)
-	jwtToken = responseBody["jwt"]
-	fmt.Println(jwtToken)
+	bearerToken = responseBody["token"]
 	return
 }

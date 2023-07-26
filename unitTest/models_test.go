@@ -4,6 +4,13 @@ import (
 	"album/database/models"
 )
 
+var PutAlbum *models.Album = &models.Album{
+	ID:     "3",
+	Title:  "photo's akbar",
+	Artist: "akbari",
+	Price:  9.89,
+}
+
 var Users = []*models.User{
 	{
 		Name:     "Mina",
@@ -22,6 +29,12 @@ var Users = []*models.User{
 		Username: "akbar",
 		Email:    "akbar@gmail.com",
 		Password: "akbar123",
+	},
+	{
+		Name:     "Meshkat",
+		Username: "meshkat",
+		Email:    "meshkat@gmail.com",
+		Password: "meshkat123",
 	},
 }
 
