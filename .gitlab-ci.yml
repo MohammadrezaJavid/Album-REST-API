@@ -5,11 +5,27 @@ stages:
 
 run-test:
   stage: test
-  # TODO
+  image: golang:1.21rc2-alpine3.18
+  before_script:
+    - "make mysql-up"
+  script:
+    - "echo Run Unit Test"
+    - "make test"
+  after_script:
+    - "make mysql-down"
+  allow_failure: false
 
 build-docker-image:
   stage: build
-  # TODO
+  before_script:
+    - "echo login to $REGISTRY_URL"
+    - "docker login --username $REGISTRY_USERNAME --password $REGISTRY_PASSWORD $REGISTRY_URL"
+  script: 
+    - "echo Build images"
+    - "make build-images"
+
+    - "echo push images to $REGISTRY_URL"
+    - "make push-images"
 
 deploy:
   stage: deploy
