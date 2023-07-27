@@ -1,6 +1,6 @@
 build-images:
-	@ docker build -t album:latest ./dockerfile/album-dockerfile
-	@ docker build -t my-mysql:8.0 ./dockerfile/mysql-dockerfile
+	@ docker build -t album:latest -f ./dockerfile/album-dockerfile/Dockerfile .
+	@ docker build -t my-mysql:8.0 -f ./dockerfile/mysql-dockerfile/Dockerfile .
 
 compose-up:
 	@ docker-compose up -d
