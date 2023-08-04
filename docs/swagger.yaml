@@ -1,35 +1,47 @@
 basePath: /api
 definitions:
-  album_swagger_models.User:
+  gorm.DeletedAt:
     properties:
-      email:
+      time:
         type: string
-      name:
-        type: string
-      password:
-        type: string
-      username:
-        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
     type: object
   models.Album:
     properties:
       artist:
         type: string
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
       id:
+        type: integer
+      price:
+        type: number
+      title:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  models.SwagAlbum:
+    properties:
+      artist:
         type: string
       price:
         type: number
       title:
         type: string
     type: object
-  models.BaseAuth:
+  swagmodels.BaseAuth:
     properties:
       email:
         type: string
       password:
         type: string
     type: object
-  models.Result:
+  swagmodels.Result:
     properties:
       email:
         type: string
@@ -38,9 +50,20 @@ definitions:
       username:
         type: string
     type: object
-  models.Token:
+  swagmodels.Token:
     properties:
       token:
+        type: string
+    type: object
+  swagmodels.User:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      username:
         type: string
     type: object
 host: localhost:8070
@@ -53,7 +76,7 @@ info:
   license:
     name: MIT
     url: https://opensource.org/licenses/MIT
-  title: Go + Gin Album rest API Service
+  title: Go + Gin Album Rest API Service
   version: "1.0"
 paths:
   /jwt/albums:
@@ -65,7 +88,9 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Album'
+            items:
+              $ref: '#/definitions/models.Album'
+            type: array
       security:
       - BearerAuth: []
       summary: Get all Albums from database
@@ -79,7 +104,7 @@ paths:
         name: album
         required: true
         schema:
-          $ref: '#/definitions/models.Album'
+          $ref: '#/definitions/models.SwagAlbum'
       produces:
       - application/json
       responses:
@@ -90,27 +115,6 @@ paths:
       security:
       - BearerAuth: []
       summary: Post an Album
-      tags:
-      - CRUD Album
-    put:
-      description: Retrieve an Album by id from database, update it and save to database
-      parameters:
-      - description: Album JSON
-        in: body
-        name: album
-        required: true
-        schema:
-          $ref: '#/definitions/models.Album'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.Album'
-      security:
-      - BearerAuth: []
-      summary: Update one Album from database
       tags:
       - CRUD Album
   /jwt/albums/{id}:
@@ -152,6 +156,32 @@ paths:
       summary: Get one Album from database
       tags:
       - CRUD Album
+    put:
+      description: Retrieve an Album by id from database, update it and save to database
+      parameters:
+      - description: Album ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Album JSON
+        in: body
+        name: album
+        required: true
+        schema:
+          $ref: '#/definitions/models.SwagAlbum'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Album'
+      security:
+      - BearerAuth: []
+      summary: Update one Album from database
+      tags:
+      - CRUD Album
   /token:
     post:
       description: Create one jwt token
@@ -161,14 +191,14 @@ paths:
         name: baseAuth
         required: true
         schema:
-          $ref: '#/definitions/models.BaseAuth'
+          $ref: '#/definitions/swagmodels.BaseAuth'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Token'
+            $ref: '#/definitions/swagmodels.Token'
       summary: Generate one token
       tags:
       - Auth
@@ -181,14 +211,14 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/album_swagger_models.User'
+          $ref: '#/definitions/swagmodels.User'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Result'
+            $ref: '#/definitions/swagmodels.Result'
       summary: Register one user
       tags:
       - Auth

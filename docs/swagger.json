@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
         "description": "This is a sample server for save Albums in mysql database",
-        "title": "Go + Gin Album rest API Service",
+        "title": "Go + Gin Album Rest API Service",
         "contact": {
             "name": "API Support",
             "url": "http://www.swagger.io/api",
@@ -36,41 +36,10 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Album"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Retrieve an Album by id from database, update it and save to database",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "CRUD Album"
-                ],
-                "summary": "Update one Album from database",
-                "parameters": [
-                    {
-                        "description": "Album JSON",
-                        "name": "album",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Album"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.Album"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Album"
+                            }
                         }
                     }
                 }
@@ -96,7 +65,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Album"
+                            "$ref": "#/definitions/models.SwagAlbum"
                         }
                     }
                 ],
@@ -132,6 +101,47 @@
                         "name": "id",
                         "in": "path",
                         "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Album"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve an Album by id from database, update it and save to database",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CRUD Album"
+                ],
+                "summary": "Update one Album from database",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Album ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Album JSON",
+                        "name": "album",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.SwagAlbum"
+                        }
                     }
                 ],
                 "responses": {
@@ -190,7 +200,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.BaseAuth"
+                            "$ref": "#/definitions/swagmodels.BaseAuth"
                         }
                     }
                 ],
@@ -198,7 +208,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Token"
+                            "$ref": "#/definitions/swagmodels.Token"
                         }
                     }
                 }
@@ -221,7 +231,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/album_swagger_models.User"
+                            "$ref": "#/definitions/swagmodels.User"
                         }
                     }
                 ],
@@ -229,7 +239,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Result"
+                            "$ref": "#/definitions/swagmodels.Result"
                         }
                     }
                 }
@@ -237,20 +247,15 @@
         }
     },
     "definitions": {
-        "album_swagger_models.User": {
+        "gorm.DeletedAt": {
             "type": "object",
             "properties": {
-                "email": {
+                "time": {
                     "type": "string"
                 },
-                "name": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string"
+                "valid": {
+                    "description": "Valid is true if Time is not NULL",
+                    "type": "boolean"
                 }
             }
         },
@@ -260,7 +265,30 @@
                 "artist": {
                     "type": "string"
                 },
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
                 "id": {
+                    "type": "integer"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.SwagAlbum": {
+            "type": "object",
+            "properties": {
+                "artist": {
                     "type": "string"
                 },
                 "price": {
@@ -271,7 +299,7 @@
                 }
             }
         },
-        "models.BaseAuth": {
+        "swagmodels.BaseAuth": {
             "type": "object",
             "properties": {
                 "email": {
@@ -282,7 +310,7 @@
                 }
             }
         },
-        "models.Result": {
+        "swagmodels.Result": {
             "type": "object",
             "properties": {
                 "email": {
@@ -296,10 +324,27 @@
                 }
             }
         },
-        "models.Token": {
+        "swagmodels.Token": {
             "type": "object",
             "properties": {
                 "token": {
+                    "type": "string"
+                }
+            }
+        },
+        "swagmodels.User": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "username": {
                     "type": "string"
                 }
             }

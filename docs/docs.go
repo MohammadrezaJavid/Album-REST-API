@@ -43,41 +43,10 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Album"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Retrieve an Album by id from database, update it and save to database",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "CRUD Album"
-                ],
-                "summary": "Update one Album from database",
-                "parameters": [
-                    {
-                        "description": "Album JSON",
-                        "name": "album",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Album"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.Album"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Album"
+                            }
                         }
                     }
                 }
@@ -103,7 +72,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Album"
+                            "$ref": "#/definitions/models.SwagAlbum"
                         }
                     }
                 ],
@@ -139,6 +108,47 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Album"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve an Album by id from database, update it and save to database",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CRUD Album"
+                ],
+                "summary": "Update one Album from database",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Album ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Album JSON",
+                        "name": "album",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.SwagAlbum"
+                        }
                     }
                 ],
                 "responses": {
@@ -197,7 +207,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.BaseAuth"
+                            "$ref": "#/definitions/swagmodels.BaseAuth"
                         }
                     }
                 ],
@@ -205,7 +215,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Token"
+                            "$ref": "#/definitions/swagmodels.Token"
                         }
                     }
                 }
@@ -228,7 +238,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/album_swagger_models.User"
+                            "$ref": "#/definitions/swagmodels.User"
                         }
                     }
                 ],
@@ -236,7 +246,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Result"
+                            "$ref": "#/definitions/swagmodels.Result"
                         }
                     }
                 }
@@ -244,20 +254,15 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "album_swagger_models.User": {
+        "gorm.DeletedAt": {
             "type": "object",
             "properties": {
-                "email": {
+                "time": {
                     "type": "string"
                 },
-                "name": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string"
+                "valid": {
+                    "description": "Valid is true if Time is not NULL",
+                    "type": "boolean"
                 }
             }
         },
@@ -267,7 +272,30 @@ const docTemplate = `{
                 "artist": {
                     "type": "string"
                 },
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
                 "id": {
+                    "type": "integer"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.SwagAlbum": {
+            "type": "object",
+            "properties": {
+                "artist": {
                     "type": "string"
                 },
                 "price": {
@@ -278,7 +306,7 @@ const docTemplate = `{
                 }
             }
         },
-        "models.BaseAuth": {
+        "swagmodels.BaseAuth": {
             "type": "object",
             "properties": {
                 "email": {
@@ -289,7 +317,7 @@ const docTemplate = `{
                 }
             }
         },
-        "models.Result": {
+        "swagmodels.Result": {
             "type": "object",
             "properties": {
                 "email": {
@@ -303,10 +331,27 @@ const docTemplate = `{
                 }
             }
         },
-        "models.Token": {
+        "swagmodels.Token": {
             "type": "object",
             "properties": {
                 "token": {
+                    "type": "string"
+                }
+            }
+        },
+        "swagmodels.User": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "username": {
                     "type": "string"
                 }
             }
@@ -327,7 +372,7 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "localhost:8070",
 	BasePath:         "/api",
 	Schemes:          []string{},
-	Title:            "Go + Gin Album rest API Service",
+	Title:            "Go + Gin Album Rest API Service",
 	Description:      "This is a sample server for save Albums in mysql database",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
