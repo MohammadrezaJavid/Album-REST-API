@@ -1,32 +1,54 @@
+variables:
+  MYSQL_ROOT_PASSWORD: $DB_ROOT_PASSWORD
+  MYSQL_DATABASE: $DB_NAME
+  MYSQL_USER: $DB_USER
+  MYSQL_PASSWORD: $DB_PASSWORD
+
 stages:
   - test
   - build
+  - push
   - deploy
 
-run-test:
+test-job:
   stage: test
-  image: golang:1.21rc2-alpine3.18
+  services:
+  - name: public.jlinux.ir/database/mysql:8.0
+    alias: db
+    # command: ["--default-authentication-plugin=mysql_native_password"]
+  image: public.jlinux.ir/language/go/golang:1.19
   before_script:
-    - "make mysql-up"
+    - "make install-requirements"
   script:
-    - "echo Run Unit Test"
+    - "echo Run Test"
     - "make test"
-  after_script:
-    - "make mysql-down"
-  allow_failure: false
 
-build-docker-image:
+build-job:
   stage: build
   before_script:
-    - "echo login to $REGISTRY_URL"
-    - "docker login --username $REGISTRY_USERNAME --password $REGISTRY_PASSWORD $REGISTRY_URL"
-  script: 
-    - "echo Build images"
+    - "apk update && apk add make"
+  script:
     - "make build-images"
 
-    - "echo push images to $REGISTRY_URL"
+push-job:
+  stage: push 
+  before_script:
+    - "apk update && apk add make"
+    - "make docker-login"
+  script: 
     - "make push-images"
 
-deploy:
+deploy-job:
   stage: deploy
-  # TODO
+  before_script:
+    - "apk update && apk add make && apk add curl"
+    - "(command -v ssh-agent > /dev/null) || (apk add openssh)"
+    - "eval $(ssh-agent -s)"
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - "mkdir -p ~/.ssh"
+    - "chmod 700 ~/.ssh"
+    - "ssh-keyscan $SERVER_IP >> ~/.ssh/known_hosts"
+    - "chmod 400 ~/.ssh/known_hosts"
+  script:
+    - "echo deploy to Production"
+    - "make production-up"
