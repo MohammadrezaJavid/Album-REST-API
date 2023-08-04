@@ -2,19 +2,21 @@ package services
 
 import (
 	"album/database/models"
+	"album/database/repositories"
+	"errors"
 
 	"gorm.io/gorm"
 )
 
-func SelectAlbums(db *gorm.DB) *[]models.Album {
+func SelectAlbums() *[]models.Album {
 	var albums *[]models.Album
-	db.Find(&albums)
+	repositories.DataBase.Find(&albums)
 	return albums
 }
 
-func SelectAlbumByID(ID string, db *gorm.DB) *models.Album {
+func SelectAlbumByID(ID uint) *models.Album {
 	var album *models.Album
-	db.Where("id = ?", ID).First(&album)
+	repositories.DataBase.Where("id = ?", ID).First(&album)
 	return album
 }
 
@@ -24,21 +26,32 @@ curl -X POST -H "Content-Type: application/json" -d '{"Title": "javid photo", "A
 *
 */
 
-func InsertAlbum(newAlbum *models.Album, db *gorm.DB) error {
-	result := db.Create(&newAlbum)
+func InsertAlbum(newAlbum *models.Album) error {
+	result := repositories.DataBase.Create(&newAlbum)
 	if err := result.Error; err != nil {
 		return err
 	}
 	return nil
 }
 
-func UpdateAlbum(album *models.Album, db *gorm.DB) (string, error) {
-	DeleteAlbumByID(album.ID, db)
-	err := InsertAlbum(album, db)
-	return album.ID, err
+func UpdateAlbum(ID uint, newAlbum *models.SwagAlbum) error {
+	oldAlbum := SelectAlbumByID(ID)
+	if oldAlbum.ID == 0 {
+		return errors.New("album not found")
+	}
+
+	oldAlbum.Title = newAlbum.Title
+	oldAlbum.Artist = newAlbum.Artist
+	oldAlbum.Price = newAlbum.Price
+
+	if err := repositories.DataBase.Save(&oldAlbum).Error; err != nil {
+		return err
+	}
+
+	return nil
 }
 
-func DeleteAlbumByID(ID string, db *gorm.DB) *gorm.DB {
-	result := db.Delete(&models.Album{}, ID)
+func DeleteAlbumByID(ID uint) *gorm.DB {
+	result := repositories.DataBase.Delete(&models.Album{}, ID)
 	return result
 }

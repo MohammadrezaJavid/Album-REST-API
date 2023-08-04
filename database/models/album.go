@@ -1,8 +1,16 @@
 package models
 
+import "gorm.io/gorm"
+
 type Album struct {
-	ID     string  `gorm:"primaryKey" json:"id"`
+	gorm.Model
 	Title  string  `gorm:"size:255" json:"title"`
+	Artist string  `json:"artist"`
+	Price  float64 `json:"price"`
+}
+
+type SwagAlbum struct {
+	Title  string  `json:"title"`
 	Artist string  `json:"artist"`
 	Price  float64 `json:"price"`
 }
