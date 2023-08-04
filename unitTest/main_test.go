@@ -29,6 +29,11 @@ func TestMain(m *testing.M) {
 
 func setUpMigrate() {
 	// config.LoadEnv()
+	// fmt.Println(os.Getenv("MYSQL_ROOT_PASSWORD"))
+	// fmt.Println(os.Getenv("DB_USER"))
+	// fmt.Println(os.Getenv("DB_PASSWORD"))
+	// fmt.Println(os.Getenv("DB_HOST"))
+	// fmt.Println(os.Getenv("DB_NAME"))
 
 	repositories.DatabaseHandle()
 	database.Migrate()
