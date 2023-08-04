@@ -1,11 +1,14 @@
 package handlers
 
+// swag init --parseDependency --parseInternal
+
 import (
-	"album/database/models"
-	"album/database/repositories"
 	"album/database/services"
-	"errors"
+
 	"net/http"
+	"strconv"
+
+	"album/database/models"
 
 	"github.com/gin-gonic/gin"
 )
@@ -14,11 +17,11 @@ import (
 // @Description Retrieve all albums from the database
 // @Tags		CRUD Album
 // @Produce 	json
-// @Success 	200 	 {object} 	models.Album
+// @Success 	200 	 {array} 	models.Album
 // @Router 		/jwt/albums  	[get]
 // @Security BearerAuth
 func GetAlbums(ctx *gin.Context) {
-	albums := services.SelectAlbums(repositories.DataBase)
+	albums := services.SelectAlbums()
 	ctx.IndentedJSON(http.StatusOK, albums)
 }
 
@@ -32,7 +35,17 @@ func GetAlbums(ctx *gin.Context) {
 // @Security BearerAuth
 func GetAlbumByID(ctx *gin.Context) {
 	ID := ctx.Param("id")
-	album := services.SelectAlbumByID(ID, repositories.DataBase)
+
+	uintId, shouldReturn := strToInt(ID, ctx)
+	if shouldReturn {
+		return
+	}
+
+	album := services.SelectAlbumByID(uintId)
+	if album.ID == 0 {
+		ctx.IndentedJSON(http.StatusOK, gin.H{"message": "album not found"})
+		return
+	}
 	ctx.JSON(http.StatusOK, album)
 }
 
@@ -41,7 +54,7 @@ func GetAlbumByID(ctx *gin.Context) {
 // @Description Post an Album and saved to database
 // @Tags		CRUD Album
 // @Produce      json
-// @Param		album	body		models.Album	true	"Album JSON"
+// @Param		album	body		models.SwagAlbum	true	"Album JSON"
 // @Success 	200 	{object} 	models.Album
 // @Router 		/jwt/albums 	[post]
 // @Security BearerAuth
@@ -52,36 +65,49 @@ func PostAlbum(ctx *gin.Context) {
 		return
 	}
 
-	err := services.InsertAlbum(newAlbum, repositories.DataBase)
+	err := services.InsertAlbum(newAlbum)
 	if err != nil {
 		ctx.IndentedJSON(http.StatusBadRequest, gin.H{"Error": err.Error()})
 		return
 	}
-	ctx.JSON(http.StatusCreated, newAlbum)
+	ctx.IndentedJSON(http.StatusCreated, newAlbum)
 }
 
 // @Summary 	Update one Album from database
 // @Description Retrieve an Album by id from database, update it and save to database
 // @Tags		CRUD Album
 // @Produce 	json
-// @Param		album	body		models.Album	true	"Album JSON"
-// @Success 	200 	{object} models.Album
-// @Router 		/jwt/albums		[put]
+// @Param		id	path string true "Album ID"
+// @Param		album	body		models.SwagAlbum	true	"Album JSON"
+// @Success 	200 	{object} 	models.Album
+// @Router 		/jwt/albums/{id}	[put]
 // @Security BearerAuth
 func UpdateAlbumByID(ctx *gin.Context) {
-	var updateAlbum *models.Album
-	err := ctx.BindJSON(&updateAlbum)
-	if err != nil {
-		ctx.IndentedJSON(http.StatusFound, gin.H{"message": err.Error()})
+
+	// get ID
+	ID := ctx.Param("id")
+	uintId, shouldReturn := strToInt(ID, ctx)
+	if shouldReturn {
 		return
 	}
 
-	id, err := services.UpdateAlbum(updateAlbum, repositories.DataBase)
+	// get new album
+	var newAlbum *models.SwagAlbum
+	err := ctx.BindJSON(&newAlbum)
 	if err != nil {
-		ctx.IndentedJSON(http.StatusBadRequest, gin.H{"Error": err.Error()})
+		ctx.IndentedJSON(http.StatusFound, gin.H{"error": err.Error()})
+		ctx.Abort()
 		return
 	}
-	album := services.SelectAlbumByID(id, repositories.DataBase)
+
+	// update old album
+	if err := services.UpdateAlbum(uintId, newAlbum); err != nil {
+		ctx.IndentedJSON(http.StatusOK, gin.H{"error": err.Error()})
+		ctx.Abort()
+		return
+	}
+
+	album := services.SelectAlbumByID(uintId)
 	ctx.IndentedJSON(http.StatusOK, album)
 }
 
@@ -94,13 +120,25 @@ func UpdateAlbumByID(ctx *gin.Context) {
 // @Security BearerAuth
 func DeleteAlbum(ctx *gin.Context) {
 	ID := ctx.Param("id")
-	album := services.SelectAlbumByID(ID, repositories.DataBase)
-	if album.ID == "" {
-		ctx.IndentedJSON(http.StatusNotFound, gin.H{"Error": errors.New("album not found")})
-		ctx.Abort()
+	uintId, shouldReturn := strToInt(ID, ctx)
+	if shouldReturn {
 		return
 	}
 
-	services.DeleteAlbumByID(ID, repositories.DataBase)
-	ctx.IndentedJSON(http.StatusOK, gin.H{"Error": errors.New("successfully deleted album")})
+	result := services.DeleteAlbumByID(uintId)
+	if result.Error != nil || result.RowsAffected == 0 {
+		ctx.IndentedJSON(http.StatusBadRequest, gin.H{"error": "Album was not deleted or Not found"})
+	} else {
+		ctx.IndentedJSON(http.StatusOK, gin.H{"message": "successfully deleted album"})
+	}
+}
+
+func strToInt(ID string, ctx *gin.Context) (uint, bool) {
+	uintId, err := strconv.ParseUint(ID, 10, 64)
+	if err != nil {
+		ctx.IndentedJSON(http.StatusBadRequest, gin.H{"error": "Invalid parameter"})
+		ctx.Abort()
+		return 0, true
+	}
+	return uint(uintId), false
 }

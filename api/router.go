@@ -20,11 +20,11 @@ func Routes() *gin.Engine {
 
 		jwt := api.Group("/jwt").Use(middlewares.Authorization())
 		{
-			jwt.GET("/albums", handlers.GetAlbums)          // Get all album
-			jwt.POST("/albums", handlers.PostAlbum)         // Add one album
-			jwt.PUT("/albums", handlers.UpdateAlbumByID)    // Update one album by ID
-			jwt.GET("/albums/:id", handlers.GetAlbumByID)   // Get one album by ID
-			jwt.DELETE("/albums/:id", handlers.DeleteAlbum) // Delete one album by ID
+			jwt.GET("/albums", handlers.GetAlbums)           // Get all album
+			jwt.POST("/albums", handlers.PostAlbum)          // Add one album
+			jwt.PUT("/albums/:id", handlers.UpdateAlbumByID) // Update one album by ID
+			jwt.GET("/albums/:id", handlers.GetAlbumByID)    // Get one album by ID
+			jwt.DELETE("/albums/:id", handlers.DeleteAlbum)  // Delete one album by ID
 
 		}
 	}

@@ -4,7 +4,7 @@ import (
 	dbModel "album/database/models"
 	"album/database/repositories"
 	"album/database/services"
-	swagModel "album/swagger/models"
+	swagModel "album/swagger/swagModels"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
