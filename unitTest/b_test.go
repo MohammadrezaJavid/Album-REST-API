@@ -32,7 +32,7 @@ func TestGetAlbums(t *testing.T) {
 func TestGetAlbumByID(t *testing.T) {
 	responseWriter := makeRequest(
 		http.MethodGet,
-		"/api/jwt/albums/"+string(Albums[0].ID),
+		"/api/jwt/albums/"+"1",
 		nil,
 		true,
 	)
@@ -42,7 +42,7 @@ func TestGetAlbumByID(t *testing.T) {
 func TestPutAlbum(t *testing.T) {
 	responseWriter := makeRequest(
 		http.MethodPut,
-		"/api/jwt/albums",
+		"/api/jwt/albums/"+"1",
 		PutAlbum,
 		true,
 	)
@@ -52,7 +52,7 @@ func TestPutAlbum(t *testing.T) {
 func TestDeleteAlbumByID(t *testing.T) {
 	responseWriter := makeRequest(
 		http.MethodDelete,
-		"/api/jwt/albums/"+string(Albums[0].ID),
+		"/api/jwt/albums/"+"1",
 		nil,
 		true,
 	)

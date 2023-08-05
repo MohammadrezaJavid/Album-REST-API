@@ -4,7 +4,7 @@ import (
 	"album/database/models"
 )
 
-var PutAlbum *models.Album = &models.Album{
+var PutAlbum *models.SwagAlbum = &models.SwagAlbum{
 	Title:  "photo's akbar",
 	Artist: "akbari",
 	Price:  9.89,
@@ -37,7 +37,7 @@ var Users = []*models.User{
 	},
 }
 
-var Albums = []*models.Album{
+var Albums = []*models.SwagAlbum{
 	{
 		Title:  "mina photos",
 		Artist: "Mina",
