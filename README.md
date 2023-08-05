@@ -36,3 +36,6 @@ make compose-logs
 
 - For access Swagger page
 click [here](http://localhost:8070/api/docs/index.html)
+
+- For show Album project in GitLab
+click [here](https://gitlab.com/mohammadrezajavid/Album-REST-API)
