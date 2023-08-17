@@ -39,3 +39,5 @@ click [here](http://localhost:8070/api/docs/index.html)
 
 - For show Album project in GitLab
 click [here](https://gitlab.com/mohammadrezajavid/Album-REST-API)
+
+- Album REST API link production [api.jlinux.ir/v1/docs/index.html](https://api.jlinux.ir/v1/docs/index.html)
